@@ -11,14 +11,15 @@ import kotlin.math.exp
 data class News(
     val id: Long,
     val title: String,
-    val place: String,
+    val place: Place?,
     val description: String,
+    @SerializedName("site_url")
     val siteUrl: String,
     @SerializedName("favorites_count")
     val favoritesCount: Int,
     @SerializedName("comments_count")
     val commentsCount: Int,
-    val date: String,
+    val slug: String,
     @SerializedName("publication_date")
     val publicationDate: Long
 ) {
@@ -26,10 +27,8 @@ data class News(
         get() {
             return publicationDate.let {
                 try {
-                    // Преобразуем временную метку в LocalDate
                     Instant.ofEpochSecond(it).atZone(ZoneId.systemDefault()).toLocalDate()
                 } catch (e: NumberFormatException) {
-                    // Обработка ошибки, если строка не может быть преобразована в Long
                     null
                 }
             }
@@ -37,3 +36,8 @@ data class News(
     val rating: Double
         get() = 1 / (1 + exp(-(favoritesCount / (commentsCount + 1).toDouble())))
 }
+
+@Serializable
+data class Place(
+    val id: Long
+)

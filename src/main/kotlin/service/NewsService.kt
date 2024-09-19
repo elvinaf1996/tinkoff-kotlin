@@ -35,7 +35,7 @@ class NewsService {
             parameter("order_by", "-date_posted")
             parameter("location", "kzn")
             parameter("actual_only", true)
-            parameter("fields", "id,title,slug,publication_date,description,favorites_count,comments_count")
+            parameter("fields", "id,title,slug,publication_date,description,favorites_count,comments_count,place,description,site_url")
         }
 
         if (!httpResponse.status.isSuccess()) {
@@ -51,25 +51,18 @@ class NewsService {
 
     fun saveNews(path: String, news: List<News>) {
         logger.info("Сохранение новостей по пути: $path")
-
-        // Проверяем, что путь валиден
         val file = File(path)
 
-        // Проверяем, существует ли файл по указанному пути
         if (file.exists()) {
             logger.error("Файл уже существует по пути: $path")
             throw IOException("Файл уже существует по пути: $path")
         }
 
-        // Создаем родительские директории, если они не существуют
         file.parentFile?.mkdirs()
 
-        // Записываем новости в CSV-файл
         FileWriter(file).use { writer ->
-            // Записываем заголовки
             writer.append("id,rating,title,publicationLocalDate,place,description,siteUrl,favoritesCount,commentsCount\n")
 
-            // Записываем каждую новость
             for (newsItem in news) {
                 writer.append("${newsItem.id},${newsItem.rating},${newsItem.publicationLocalDate},${newsItem.title},${newsItem.place},${newsItem.description},${newsItem.siteUrl},${newsItem.favoritesCount},${newsItem.commentsCount}\n")
             }

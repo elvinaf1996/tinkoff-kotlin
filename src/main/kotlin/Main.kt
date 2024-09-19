@@ -1,12 +1,12 @@
 package org.example
 
+import news
+import org.example.dsl.NewsCollection
 import org.example.steps.NewsService
 import org.example.steps.getMostRatedNews
 import java.io.IOException
 import java.time.LocalDate
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 suspend fun main() {
     val newsService = NewsService();
 
@@ -27,23 +27,44 @@ suspend fun main() {
         println("Ошибка при сохранении новостей: ${e.message}")
     }
 
-//    mostRatedNews.forEach { println(it) }
+    val article = news {
+        id = 51430
+        title = "Индекс счастья россиян упал до минимальных показателей с 2014 года"
+        place {
+            id = 123
+        }
+        description = "<p>Уровень медленно снижался в течение лета.</p>"
+        siteUrl = "https://kudago.com/all/news/indeks-schastya-upal-do/"
+        favoritesCount = 1
+        commentsCount = 2
+        slug = "indeks-schastya-upal-do"
+        publicationDate = 1726670429
+    }
 
-//    newsPrinter {
-//        mostRatedNews
-//    }
+    println(article)
 
-//    val newsItem: News = dsl.news {
-//        id = 1
-//        title = "Kotlin DSLs are Awesome!"
-//        place = "Online"
-//        description = "Learn how to create DSLs in Kotlin."
-//        siteUrl = "https://example.com/kotlin-dsl"
-//        favoritesCount = 100
-//        commentsCount = 20
-//        date = "2023-10-01"
-//        publicationDate = 1696123200 // Example timestamp
-//    }
-//
-//    println(newsItem)
+    val newsList = NewsCollection().newsList {
+        news {
+            id = 51429
+            title = "Появился первый трейлер комедии «Братья» с Питером Динклейджем и Джошем Бролином"
+            place {
+                id = 101
+            }
+            description = "<p>Её выход намечен на начало октября.</p>"
+            siteUrl = "https://kudago.com/all/news/trejler-komedii-bratya/"
+            commentsCount = 1
+            slug = "trejler-komedii-bratya"
+            publicationDate = 1726670316
+        }
+        news {
+            id = 51428
+            title = "Вышел трейлер фантастического фильма «Микки 17» с Робертом Паттинсоном"
+            description = "<p>Премьера состоится в начале следующего года.</p>"
+            siteUrl = "https://kudago.com/all/news/trejler-mikki-17-s-robertom-pattinsonom/"
+            favoritesCount = 1
+            slug = "trejler-mikki-17-s-robertom-pattinsonom"
+            publicationDate = 1726670191
+        }
+    }
+    println(newsList)
 }
